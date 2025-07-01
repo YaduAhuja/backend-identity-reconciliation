@@ -8,6 +8,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    ResponseEntity<String> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
+        log.info("Handling {}", exception.getClass().getName(), exception);
+        return ResponseEntity.badRequest().body("Invalid Request Method");
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    ResponseEntity<String> handleNoResourceFoundException(NoResourceFoundException exception) {
+        log.info("Handling {}", exception.getClass().getName(), exception);
+        return ResponseEntity.notFound().build();
+    }
+
     @ExceptionHandler(Exception.class)
     ResponseEntity<String> handleException(Exception exception) {
         log.error("Unhandled Exception occurred", exception);
