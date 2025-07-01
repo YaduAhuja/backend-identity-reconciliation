@@ -1,6 +1,9 @@
 
 # Backend Identity Reconciliation
 
+***
+**Note: Check the [considerations](#considerationfuture-work) for my thoughts**
+
 We have a contacts table in with following info : 
 
 ```TypeScript
@@ -207,3 +210,12 @@ Yes. Let’s take an example
   }
 }
 ```
+
+
+## Consideration/Future Work
+
+I did not knew the scale of this application, So I have not added the optimization but we can look for them. 
+
+1. Removal of `linkPrecedence` column from schema. I did not find any usecase for the linkPrecedence column so I think we should remove and even if we want it we can change it to a calculated column with predicate that `linkedId == NULL ? 'primary' : 'secondary'`.
+2. Index Creation : We can create index [(Phone, Email), (Email), (LinkedId)] but I did not knew the read/write ratio so I just added a Unique key on (Phone, Email) for correctness.
+3. I also think, If reads were less we could even remove this updation all-together and use precomputation but that is a long shot and I don't think that is needed for now. 
