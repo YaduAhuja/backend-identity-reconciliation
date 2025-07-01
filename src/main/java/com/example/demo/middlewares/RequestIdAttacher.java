@@ -17,22 +17,19 @@ import java.io.IOException;
 @Order(1)
 @Component
 public class RequestIdAttacher extends HttpFilter {
-    private static final String REQUEST_ID_HEADER = "X-Request-ID";
-    private static final String MDC_KEY = "RequestID";
+    private static final String REQUEST_ID_HEADER = "X-Request-Id";
+    private static final String MDC_KEY = "RequestId";
 
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         try {
             String requestId = request.getHeader(REQUEST_ID_HEADER);
-            if (requestId == null)
+            if (requestId == null || requestId.isBlank())
                 requestId = Generators.timeBasedEpochGenerator().generate().toString();
 
+            response.addHeader(REQUEST_ID_HEADER, requestId);
             MDC.put(MDC_KEY, requestId);
             chain.doFilter(request, response);
-
-            String responseRequestId = response.getHeader(REQUEST_ID_HEADER);
-            if (responseRequestId == null)
-                response.addHeader(REQUEST_ID_HEADER, requestId);
         } finally {
             MDC.remove(MDC_KEY);
         }

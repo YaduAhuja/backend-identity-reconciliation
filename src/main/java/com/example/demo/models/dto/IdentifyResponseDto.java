@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IdentifyResponseDto {
+    public static final IdentifyResponseDto DEFAULT = new IdentifyResponseDto(ContactDto.DEFAULT);
     ContactDto contact;
 
     @Getter
@@ -17,6 +18,7 @@ public class IdentifyResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ContactDto {
+        static final ContactDto DEFAULT = new ContactDto(0, new String[0], new String[0], new int[0]);
         int primaryContactId;
         String[] emails;
         String[] phoneNumbers;
